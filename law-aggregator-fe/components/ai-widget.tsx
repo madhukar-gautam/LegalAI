@@ -40,7 +40,7 @@ export function AIWidget() {
         aria-label="Open AI Intake"
       >
         <Sparkles className="w-4 h-4 text-accent" />
-        <span className="text-sm font-medium text-slate-200">AI Intake</span>
+        <span className="text-sm font-medium text-slate-200">LegalAI Intake</span>
         <ChevronUp className="w-4 h-4 text-slate-500" />
       </button>
     )
@@ -55,7 +55,7 @@ export function AIWidget() {
       >
         <span className="flex items-center gap-2 font-medium text-slate-100">
           <Sparkles className="w-4 h-4 text-accent" />
-          AI Intake
+          LegalAI Intake
         </span>
         <ChevronDown className="w-4 h-4 text-slate-500" />
       </button>

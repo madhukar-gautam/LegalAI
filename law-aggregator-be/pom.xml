@@ -6,7 +6,7 @@
   <artifactId>law-aggregator</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>law-aggregator</name>
-  <description>Law Aggregator Spring Boot</description>
+  <description>LegalAI Spring Boot</description>
   <properties>
     <java.version>23</java.version>
     <spring.boot.version>3.3.4</spring.boot.version>

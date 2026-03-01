@@ -1,5 +1,5 @@
 {
-  "name": "law-aggregator-web",
+  "name": "legalai-web",
   "private": true,
   "scripts": {
     "dev": "next dev",

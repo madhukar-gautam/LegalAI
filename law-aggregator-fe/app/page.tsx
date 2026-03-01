@@ -27,7 +27,7 @@ export default function HomePage() {
         <div className="flex-1 space-y-8 animate-fade-in">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/30 px-4 py-1.5 text-sm text-slate-300">
             <Scale className="w-4 h-4 text-accent" />
-            <span>Trusted legal marketplace</span>
+            <span>LegalAI – Trusted legal marketplace</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">

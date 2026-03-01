@@ -1,3 +1,3 @@
-# Law Aggregator – Spring Boot
+# LegalAI – Spring Boot
 
 Start infra: `docker compose up -d` then `mvn spring-boot:run`.

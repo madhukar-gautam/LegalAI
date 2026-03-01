@@ -4,8 +4,9 @@ import { Navbar } from '@/components/navbar'
 import { AIWidget } from '@/components/ai-widget'
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || 'Lexify',
+  title: 'LegalAI – Find verified lawyers and book consultations',
   description: 'Find verified lawyers and book consultations',
+  icons: { icon: '/legalai-logo.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
