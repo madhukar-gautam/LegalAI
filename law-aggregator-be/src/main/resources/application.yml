@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lexify
+    username: lexify
+    password: lexify
+  jpa:
+    hibernate:
+      ddl-auto: update
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  flyway:
+    enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+cors:
+  allowed-origins: "http://localhost:3000"

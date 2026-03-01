@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  html, body {
+    height: 100%;
+  }
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 400;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Libre Baskerville', Georgia, serif;
+  }
+}
+
+/* Subtle grid pattern */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(248, 250, 252, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(248, 250, 252, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Gold gradient text */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+target/
+*.zip
+
+# IDE
+.idea/
+*.iml
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs & misc
+*.log
+.DS_Store
