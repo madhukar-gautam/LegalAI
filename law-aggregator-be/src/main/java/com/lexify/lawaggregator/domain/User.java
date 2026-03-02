@@ -7,4 +7,11 @@ public class User {
   private String name; @Column(unique=true) private String email; private String phone;
   @Enumerated(EnumType.STRING) private Role role; private boolean verified;
   public enum Role { USER, LAWYER, ADMIN }
+
+  public Long getId() { return id; }
+  public String getName() { return name; }
+  public String getEmail() { return email; }
+  public String getPhone() { return phone; }
+  public Role getRole() { return role; }
+  public boolean isVerified() { return verified; }
 }
