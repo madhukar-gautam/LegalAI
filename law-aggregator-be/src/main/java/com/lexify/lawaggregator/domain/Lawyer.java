@@ -21,4 +21,14 @@ public class Lawyer {
   public List<String> getLanguages() { return languages; }
   public List<String> getPracticeAreas() { return practiceAreas; }
   public String getBio() { return bio; }
+
+  public void setUser(User user) { this.user = user; }
+  public void setCity(String city) { this.city = city; }
+  public void setYearsExp(Integer yearsExp) { this.yearsExp = yearsExp; }
+  public void setRatingAvg(Double ratingAvg) { this.ratingAvg = ratingAvg; }
+  public void setFeeMin(BigDecimal feeMin) { this.feeMin = feeMin; }
+  public void setFeeMax(BigDecimal feeMax) { this.feeMax = feeMax; }
+  public void setLanguages(List<String> languages) { this.languages = languages; }
+  public void setPracticeAreas(List<String> practiceAreas) { this.practiceAreas = practiceAreas; }
+  public void setBio(String bio) { this.bio = bio; }
 }

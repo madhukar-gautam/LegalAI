@@ -1,2 +1,54 @@
 #!/bin/sh
-mvn "$@"
+set -eu
+
+MVNW_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+MAVEN_VERSION="3.9.9"
+MAVEN_HOME="$MVNW_DIR/.mvn/apache-maven-$MAVEN_VERSION"
+MAVEN_BIN="$MAVEN_HOME/bin/mvn"
+
+if [ -z "${JAVA_HOME:-}" ]; then
+  for candidate in \
+    "/usr/lib/jvm/java-21-openjdk" \
+    "/usr/lib/jvm/java-17-openjdk" \
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home" \
+    "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home"
+  do
+    if [ -x "$candidate/bin/java" ]; then
+      JAVA_HOME="$candidate"
+      export JAVA_HOME
+      break
+    fi
+  done
+fi
+
+if [ -z "${JAVA_HOME:-}" ] || [ ! -x "$JAVA_HOME/bin/java" ]; then
+  echo "JAVA_HOME is not set and no JDK was auto-detected." >&2
+  echo "Install JDK 17+ and set JAVA_HOME, then rerun this command." >&2
+  exit 1
+fi
+
+if [ ! -x "$MAVEN_BIN" ]; then
+  echo "Maven $MAVEN_VERSION not found locally. Downloading..."
+  mkdir -p "$MVNW_DIR/.mvn"
+  ARCHIVE="$MVNW_DIR/.mvn/apache-maven-$MAVEN_VERSION-bin.zip"
+  URL="https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.zip"
+
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$URL" -o "$ARCHIVE"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO "$ARCHIVE" "$URL"
+  else
+    echo "Error: neither curl nor wget is available to download Maven." >&2
+    exit 1
+  fi
+
+  if command -v unzip >/dev/null 2>&1; then
+    unzip -q -o "$ARCHIVE" -d "$MVNW_DIR/.mvn"
+  else
+    echo "Error: unzip is required to extract Maven." >&2
+    exit 1
+  fi
+  rm -f "$ARCHIVE"
+fi
+
+exec "$MAVEN_BIN" "$@"
