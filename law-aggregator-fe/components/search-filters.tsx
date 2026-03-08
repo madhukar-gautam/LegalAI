@@ -4,9 +4,15 @@ import { Input } from './ui/input'
 import { Select } from './ui/select'
 import { Filter } from 'lucide-react'
 
-const PRACTICES = ['Property', 'Family', 'Criminal', 'Corporate', 'IP', 'Tax']
-
-export function SearchFilters({ value, onChange }: { value: any; onChange: (v: any) => void }) {
+export function SearchFilters({
+  value,
+  onChange,
+  practices,
+}: {
+  value: any
+  onChange: (v: any) => void
+  practices: string[]
+}) {
   return (
     <div className="sticky top-24 rounded-2xl border border-slate-700/50 bg-slate-800/30 p-5">
       <h3 className="flex items-center gap-2 font-semibold text-slate-100 mb-5">
@@ -32,7 +38,7 @@ export function SearchFilters({ value, onChange }: { value: any; onChange: (v: a
           <Select
             value={value.practice}
             onChange={(v) => onChange({ ...value, practice: v })}
-            options={['', ...PRACTICES]}
+            options={['', ...practices]}
             className="bg-slate-800/50 border-slate-600"
           />
         </div>

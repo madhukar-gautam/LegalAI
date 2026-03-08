@@ -10,6 +10,14 @@ import java.util.*;
 import java.util.stream.*;
 @RestController @RequestMapping("/v1/lawyers") @CrossOrigin
 public class LawyerController {
+  private static final Map<String, String> CITY_ALIASES = Map.of(
+      "gurgaon", "gurugram",
+      "bangalore", "bengaluru",
+      "bombay", "mumbai",
+      "calcutta", "kolkata",
+      "madras", "chennai"
+  );
+
   private final LawyerRepo repo;
   public LawyerController(LawyerRepo repo){ this.repo = repo; }
   @GetMapping
@@ -19,13 +27,40 @@ public class LawyerController {
     String cityQuery = normalize(city);
     String practiceQuery = normalize(practice);
     return repo.findAll().stream()
-      .filter(l -> cityQuery==null || (l.getCity()!=null && l.getCity().trim().equalsIgnoreCase(cityQuery)))
+      .filter(l -> cityQuery==null || (l.getCity()!=null && canonicalCity(l.getCity()).equals(canonicalCity(cityQuery))))
       .filter(l -> practiceQuery==null || matchesPractice(l.getPracticeAreas(), practiceQuery))
       .filter(l -> expGte==null || (l.getYearsExp()!=null && l.getYearsExp()>=expGte))
       .sorted(Comparator.comparing((Lawyer l) -> l.getRatingAvg()==null?0.0:l.getRatingAvg()).reversed())
       .map(this::toResponse)
       .collect(Collectors.toList());
   }
+
+  @GetMapping("/practice-areas")
+  public List<String> practiceAreas() {
+    return repo.findAll().stream()
+        .map(Lawyer::getPracticeAreas)
+        .filter(Objects::nonNull)
+        .flatMap(List::stream)
+        .filter(Objects::nonNull)
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .distinct()
+        .sorted(String.CASE_INSENSITIVE_ORDER)
+        .collect(Collectors.toList());
+  }
+
+  @GetMapping("/cities")
+  public List<String> cities() {
+    return repo.findAll().stream()
+        .map(Lawyer::getCity)
+        .filter(Objects::nonNull)
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .distinct()
+        .sorted(String.CASE_INSENSITIVE_ORDER)
+        .collect(Collectors.toList());
+  }
+
   @GetMapping("/{id}")
   public LawyerResponse get(@PathVariable("id") Long id) {
     return toResponse(repo.findById(id)
@@ -52,6 +87,11 @@ public class LawyerController {
     if (value == null) return null;
     String trimmed = value.trim();
     return trimmed.isEmpty() ? null : trimmed;
+  }
+
+  private String canonicalCity(String value) {
+    String normalized = value.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9 ]", " ").replaceAll("\\s+", " ").trim();
+    return CITY_ALIASES.getOrDefault(normalized, normalized);
   }
 
   private boolean matchesPractice(List<String> practiceAreas, String practiceQuery) {

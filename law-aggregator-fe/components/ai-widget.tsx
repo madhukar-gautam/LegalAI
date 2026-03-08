@@ -1,13 +1,31 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Textarea } from './ui/textarea'
+import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Sparkles, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react'
 
+type SuggestedLawyer = {
+  id: number
+  name: string
+  city: string
+  ratingAvg: number
+  practiceAreas: string[]
+}
+
+type ChatbotResponse = {
+  reply: string
+  suggestedPracticeArea: string
+  disclaimer: string
+  suggestedLawyers: SuggestedLawyer[]
+}
+
 export function AIWidget() {
   const [input, setInput] = useState('')
-  const [answer, setAnswer] = useState<string | null>(null)
+  const [city, setCity] = useState('')
+  const [answer, setAnswer] = useState<ChatbotResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [collapsed, setCollapsed] = useState(false)
@@ -20,11 +38,11 @@ export function AIWidget() {
       const res = await fetch('/api/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: input }),
+        body: JSON.stringify({ message: input, city }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || 'Request failed')
-      setAnswer(data?.label ?? 'No result')
+      setAnswer(data)
     } catch {
       setError('Unable to get suggestion. Please try again.')
     } finally {
@@ -60,14 +78,20 @@ export function AIWidget() {
         <ChevronDown className="w-4 h-4 text-slate-500" />
       </button>
       <div className="p-4 space-y-3">
+        <Input
+          placeholder="City (optional)"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="bg-slate-800/50 border-slate-600 placeholder:text-slate-500"
+        />
         <Textarea
-          placeholder="Describe your legal issue…"
+          placeholder="Describe your legal issue..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="min-h-[80px] bg-slate-800/50 border-slate-600 placeholder:text-slate-500"
         />
         <Button onClick={ask} disabled={loading || !input.trim()} className="w-full">
-          {loading ? 'Thinking…' : 'Suggest practice area'}
+          {loading ? 'Thinking...' : 'Chat with LegalAI'}
         </Button>
         {error && (
           <div className="flex items-center gap-2 rounded-lg bg-red-950/30 border border-red-900/50 px-3 py-2 text-sm text-red-400">
@@ -76,9 +100,31 @@ export function AIWidget() {
           </div>
         )}
         {answer && !error && (
-          <p className="text-sm text-slate-400">
-            Suggested: <strong className="text-accent">{answer}</strong>
-          </p>
+          <div className="space-y-2 rounded-lg border border-slate-700/70 bg-slate-900/60 p-3">
+            <p className="text-sm text-slate-300">{answer.reply}</p>
+            <p className="text-xs text-slate-400">
+              Practice area: <strong className="text-accent">{answer.suggestedPracticeArea}</strong>
+            </p>
+            {answer.suggestedLawyers?.length > 0 ? (
+              <div className="space-y-2">
+                {answer.suggestedLawyers.map((lawyer) => (
+                  <Link
+                    key={lawyer.id}
+                    href={`/lawyer/${lawyer.id}`}
+                    className="block rounded-md border border-slate-700/70 px-2 py-1.5 hover:border-accent/70"
+                  >
+                    <p className="text-sm text-slate-200">{lawyer.name}</p>
+                    <p className="text-xs text-slate-400">
+                      {lawyer.city} | Rating: {lawyer.ratingAvg ?? 'N/A'}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-500">No matching lawyers found for this query.</p>
+            )}
+            <p className="text-[11px] text-slate-500">{answer.disclaimer}</p>
+          </div>
         )}
       </div>
     </div>

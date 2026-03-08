@@ -38,3 +38,30 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+@keyframes heroSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.22; transform: scale(0.96); }
+  50% { opacity: 0.5; transform: scale(1.06); }
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero-orbit {
+  animation: heroSpin 18s linear infinite;
+}
+
+.hero-pulse {
+  animation: heroPulse 3.2s ease-in-out infinite;
+}
+
+.hero-float {
+  animation: heroFloat 4s ease-in-out infinite;
+}

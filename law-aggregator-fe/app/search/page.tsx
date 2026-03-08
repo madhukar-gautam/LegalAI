@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { fetchLawyers } from '@/lib/api'
+import { fetchLawyers, fetchPracticeAreas } from '@/lib/api'
 import { SearchFilters } from '@/components/search-filters'
 import { LawyerCard } from '@/components/lawyer-card'
 import { FileQuestion } from 'lucide-react'
@@ -21,6 +21,7 @@ function SearchContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [items, setItems] = useState<any[]>([])
+  const [practices, setPractices] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState<QueryState>(() => parseQueryFromUrl(searchParams))
@@ -44,6 +45,20 @@ function SearchContent() {
   }, [])
 
   useEffect(() => {
+    let mounted = true
+    fetchPracticeAreas()
+      .then((data) => {
+        if (mounted) setPractices(data || [])
+      })
+      .catch(() => {
+        if (mounted) setPractices([])
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  useEffect(() => {
     fetchResults(query)
   }, [query.city, query.practice, query.expGte, fetchResults])
 
@@ -62,7 +77,7 @@ function SearchContent() {
   return (
     <div className="grid grid-cols-12 gap-8 animate-fade-in">
       <aside className="col-span-12 lg:col-span-3">
-        <SearchFilters value={query} onChange={updateQuery} />
+        <SearchFilters value={query} onChange={updateQuery} practices={practices} />
       </aside>
 
       <section className="col-span-12 lg:col-span-9 space-y-6">
