@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { Logo } from './logo'
 
 export function Navbar() {
@@ -17,6 +17,12 @@ export function Navbar() {
             className="text-sm text-slate-400 hover:text-slate-100 transition-colors"
           >
             Find Lawyers
+          </Link>
+          <Link
+            href="/register"
+            className="text-sm text-slate-400 hover:text-slate-100 transition-colors"
+          >
+            Register
           </Link>
         </nav>
       </div>
